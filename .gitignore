@@ -1,0 +1,32 @@
+# --- Datos nominales (RUT, nombres): uso interno, nunca versionar ---
+# input/
+# output/datos/
+# output/perfiles-academicos.csv
+# *.rdata
+# *.RData
+# *.rds
+# *.xlsx
+# *.xls
+# *.csv
+# # Excepción: mapeo de concursos (no tiene datos personales)
+# !R/mapeo-concursos.csv
+
+# --- R / RStudio ---
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user/
+
+# --- Quarto (archivos intermedios de compilación) ---
+/.quarto/
+informe/.quarto/
+informe/*_files/
+informe/*_cache/
+
+# --- Sistema y editor ---
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+.vscode/
