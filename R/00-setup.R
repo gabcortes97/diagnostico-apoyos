@@ -46,6 +46,11 @@ horas_tope <- 44
 horas_min  <- 12
 horas_sens <- 22
 
+# Etapa de carrera según años desde el doctorado (01). Inicial = ventana de elegibilidad
+# de Fondecyt Iniciación; consolidada = más de etapa_consol años.
+etapa_inicial <- 10
+etapa_consol  <- 15
+
 # Ventana (años) para la secuencia FPCI/FIP -> postulación o adjudicación externa (08)
 ventana_seq <- 3
 

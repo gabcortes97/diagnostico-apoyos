@@ -1,6 +1,5 @@
 ---
-title: "Diagnóstico de perfiles de investigadores FACSO"
-subtitle: "Insumo para focalizar las políticas de apoyo a la postulación de fondos"
+title: "Perfiles de Investigadores FACSO"
 date: today
 lang: es
 format:
@@ -9,7 +8,7 @@ format:
     toc-depth: 3
     embed-resources: true
     number-sections: true
-  docx:
+  pdf:
     toc: true
     number-sections: true
 execute:
@@ -21,12 +20,52 @@ execute:
 ```{r}
 #| label: setup
 # Las bases se generan con run-all.R (desde la raíz del proyecto)
-# source("../R/00-setup.R")
+source(here::here("R", "00-setup.R"))
+
+academicos <- read_rds(file.path(ruta_datos, "academicos.rds"))
+```
+
+```{r}
+#| label: cifras-universo
+# Cifras del universo para el texto
+planta      <- nrow(academicos)
+univ        <- academicos |> filter(universo)
+n_univ      <- nrow(univ)
+n_sens      <- sum(academicos$universo_sens)
+n_fuera     <- planta - n_univ
+pct_mujeres <- scales::percent(mean(univ$genero == "Mujer"), accuracy = 1)
+pct_doctor  <- scales::percent(mean(univ$grado == "Doctorado", na.rm = TRUE), accuracy = 1)
+edad_med    <- median(univ$edad)
+n_adjuntos  <- sum(univ$jerarquia == "Adjunto")
+n_sin_ingr  <- sum(is.na(univ$anio_ingreso))
+n_sin_grado <- sum(is.na(univ$grado))
 ```
 
 # Resumen ejecutivo
 
 # Datos, cobertura y limitaciones
+
+## Universo de académicos
+
+- La fuente es la planta académica vigente de la Facultad, con un registro por nombramiento. Se consolidó en una fila por persona (RUT): **`r planta` académicos**.
+- Se excluyeron los nombramientos de investigadores postdoctorales y los ad honorem. Si una persona tiene además un nombramiento pagado, se mantiene en la base.
+- Las horas de cada persona se sumaron entre nombramientos, con un tope de `r horas_tope`. Se incluyen las horas en dejación transitoria, que corresponden a académicos de jornada completa con cargos directivos.
+- El **universo principal** lo forman quienes tienen `r horas_min` horas o más: **`r n_univ` académicos**. Quedan fuera `r n_fuera` personas con menos horas.
+- Como análisis de sensibilidad, los resultados se replican con quienes tienen `r horas_sens` horas o más (`r n_sens` académicos).
+- Los profesores adjuntos se incluyen si cumplen el criterio de horas (`r n_adjuntos` en el universo principal).
+
+## Características del investigador
+
+- A cada persona se le asignó su jerarquía más alta. Los años en la jerarquía se cuentan desde la fecha de ratificación de esa jerarquía.
+- El ingreso a la universidad se mide con el año de la **primera jerarquización**. No se usa la fecha de ingreso administrativa, porque incluye ingresos a honorarios y otras modalidades.
+- Edad, años en la jerarquía, años desde el grado y años desde el ingreso se calculan respecto de `r anio_ref`.
+- En el universo principal, el `r pct_mujeres` son mujeres, el `r pct_doctor` de quienes tienen grado registrado es doctor(a) y la mediana de edad es de `r edad_med` años.
+- La etapa de carrera se define según los años desde el doctorado: inicial (hasta `r etapa_inicial` años, la ventana de Fondecyt Iniciación), intermedia (hasta `r etapa_consol`) y consolidada (más de `r etapa_consol`). Quienes no tienen doctorado forman un grupo aparte.
+
+## Limitaciones
+
+- `r n_sin_grado` académicos del universo no tienen grado registrado, así que no tienen años desde el grado y quedan en el grupo "sin doctorado".
+- `r n_sin_ingr` académicos no tienen registro de primera jerarquización, así que su año de ingreso queda sin dato.
 
 # Diagnóstico general
 

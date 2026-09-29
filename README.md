@@ -25,10 +25,15 @@ El análisis parte de cero respecto del proyecto previo (`../diagnostico-apoyos`
 - **Trayectoria completa:** se incluyen los proyectos anteriores al ingreso a FACSO.
 - **Ingreso a la universidad:** se mide con `primera_jeraq`. `FECH_ING_U` no se usa, porque incluye ingresos a honorarios y otras modalidades.
 - **Características del investigador:** género, edad, jerarquía, años en la jerarquía y años desde el grado. Forman parte explícita de la caracterización y del modelamiento de los perfiles.
+- **Universo:** planta vigente, una fila por RUT (horas sumadas con tope de 44, jerarquía más alta). Se excluyen los nombramientos de postdoctorales y los ad honorem. Análisis principal con 12 horas o más; sensibilidad con 22 horas o más.
+  - Las filas idénticas de un mismo RUT son nombramientos reales e iguales: se suman.
+  - Las horas en dejación transitoria se cuentan (son académicos de jornada completa con cargos directivos).
+  - Los profesores adjuntos entran si cumplen el criterio de horas.
 
 ### Supuestos por confirmar
 
-- **Universo:** planta vigente, una fila por RUT (horas sumadas con tope de 44, jerarquía más alta). Se excluye a postdoctorales y a quienes tienen contrato ad honorem. Análisis principal con 12 horas o más; sensibilidad con 22 horas o más.
+- **Etapa de carrera:** según años desde el doctorado (inicial ≤ 7, intermedia 8–15, consolidada > 15, sin doctorado aparte). Parámetros en `00-setup.R`.
+
 - **Ventana de volumen:** 2016–2025, igual que las publicaciones. La recencia y las trayectorias usan toda la historia.
 - **Postulaciones pendientes:** cuentan como actividad, pero no entran en las tasas de éxito.
 - **Tasas de éxito:** los no adjudicados vienen sobre todo de ANID/Conicyt, así que se reportan por fuente y con la cobertura auditada.
