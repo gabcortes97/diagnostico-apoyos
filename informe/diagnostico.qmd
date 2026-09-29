@@ -1,0 +1,53 @@
+---
+title: "Diagnóstico de perfiles de investigadores FACSO"
+subtitle: "Insumo para focalizar las políticas de apoyo a la postulación de fondos"
+date: today
+lang: es
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    embed-resources: true
+    number-sections: true
+  docx:
+    toc: true
+    number-sections: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+# Las bases se generan con run-all.R (desde la raíz del proyecto)
+# source("../R/00-setup.R")
+```
+
+# Resumen ejecutivo
+
+# Datos, cobertura y limitaciones
+
+# Diagnóstico general
+
+## Cobertura: embudo de postulación y adjudicación
+
+## Postulaciones y éxito por año y tipo de fondo
+
+## Trayectorias: tiempo hasta la primera postulación y adjudicación
+
+## Pipelines U. de Chile → ANID
+
+## Brechas y factores asociados
+
+# Perfiles de investigadores
+
+## Tipología
+
+## Validación estadística (LCA)
+
+## Fichas por perfil
+
+# Alcance de los fondos de la Facultad (FPCI y FIP)
+
+# Recomendaciones
