@@ -23,6 +23,7 @@ execute:
 source(here::here("R", "00-setup.R"))
 
 academicos <- read_rds(file.path(ruta_datos, "academicos.rds"))
+proyectos  <- read_rds(file.path(ruta_datos, "proyectos.rds"))
 ```
 
 ```{r}
@@ -39,6 +40,26 @@ edad_med    <- median(univ$edad)
 n_adjuntos  <- sum(univ$jerarquia == "Adjunto")
 n_sin_ingr  <- sum(is.na(univ$anio_ingreso))
 n_sin_grado <- sum(is.na(univ$grado))
+```
+
+```{r}
+#| label: cifras-proyectos
+# Cifras de proyectos para el texto (solo académicos del universo principal)
+proy_univ     <- proyectos |> filter(rut %in% univ$rut)
+n_proy_filas  <- format(nrow(proy_univ), big.mark = ".")
+n_proyectos   <- format(n_distinct(proy_univ$codigo_proyecto), big.mark = ".")
+n_concursos   <- n_distinct(proy_univ$concurso)
+anio_proy_min <- min(proy_univ$anio_concurso)
+anio_proy_max <- max(proy_univ$anio_concurso)
+n_con_proy    <- n_distinct(proy_univ$rut)
+n_sin_proy    <- n_univ - n_con_proy
+n_facultad    <- sum(proy_univ$tipo_fondo == "Facultad")
+n_pendientes  <- sum(proy_univ$estado == "Pendiente")
+n_vigentes    <- n_distinct(proy_univ$rut[proy_univ$en_ejecucion])
+
+# No adjudicados por fuente, para la limitación de cobertura
+no_adj_anid  <- sum(proy_univ$fuente == "ANID" & proy_univ$estado == "No adjudicado")
+no_adj_uchile <- sum(proy_univ$fuente == "U. de Chile" & proy_univ$estado == "No adjudicado")
 ```
 
 # Resumen ejecutivo
@@ -62,8 +83,28 @@ n_sin_grado <- sum(is.na(univ$grado))
 - En el universo principal, el `r pct_mujeres` son mujeres, el `r pct_doctor` de quienes tienen grado registrado es doctor(a) y la mediana de edad es de `r edad_med` años.
 - La etapa de carrera se define según los años desde el doctorado: inicial (hasta `r etapa_inicial` años, la ventana de Fondecyt Iniciación), intermedia (hasta `r etapa_consol`) y consolidada (más de `r etapa_consol`). Quienes no tienen doctorado forman un grupo aparte.
 
+## Proyectos de investigación
+
+- La fuente es el registro de proyectos de la Facultad (CINDAI), con una fila por investigador y proyecto. Incluye proyectos adjudicados, no adjudicados y postulaciones con resultado pendiente.
+- Para el universo principal hay **`r n_proy_filas` participaciones** en `r n_proyectos` proyectos de `r n_concursos` concursos, entre `r anio_proy_min` y `r anio_proy_max`. `r n_con_proy` académicos tienen al menos un proyecto registrado; `r n_sin_proy` no tienen ninguno.
+- Se considera la **trayectoria completa** de cada persona, incluidos los proyectos anteriores a su llegada a la Facultad.
+- Cada concurso se clasificó según quién lo financia: ANID (incluye Conicyt), U. de Chile, otras instituciones nacionales, instituciones extranjeras y la Facultad.
+  - Los fondos de la U. de Chile (U-Inicia, U-Apoya, U-Redes, etc.) se tratan como **externos**.
+  - Los fondos de la Facultad (FPCI y FIP, `r n_facultad` participaciones) quedan fuera de la caracterización principal y se analizan aparte.
+  - Se identificaron los instrumentos clave para las trayectorias: Fondecyt Iniciación, Regular y Postdoctorado, U-Inicia y U-Apoya. También se marcaron los concursos asociativos (Anillos, Milenio, Fondap y centros).
+- El rol de cada académico en el proyecto se agrupó en cuatro categorías:
+  - **Liderazgo:** investigador(a) responsable o director(a).
+  - **Coinvestigación asociativa:** toda participación no líder en un proyecto asociativo (director alterno, investigador principal, investigador asociado o coinvestigador).
+  - **Coinvestigación individual:** coinvestigador en los demás proyectos.
+  - **Patrocinio:** patrocinio de proyectos postdoctorales (Fondecyt Postdoctorado y FIP).
+- El estado de cada proyecto se agrupó en adjudicado (finalizado o en ejecución), no adjudicado y pendiente. Las `r n_pendientes` postulaciones pendientes cuentan como actividad, pero no entran en las tasas de éxito.
+- `r n_vigentes` académicos del universo tienen al menos un proyecto **en ejecución**.
+
 ## Limitaciones
 
+- La base registra de forma incompleta las postulaciones no adjudicadas fuera de ANID (`r no_adj_anid` no adjudicados en ANID frente a `r no_adj_uchile` en la U. de Chile). Por eso, las tasas de éxito se reportan por fuente.
+- En los proyectos asociativos, CINDAI registra los roles de forma irregular: algunos usan cargos específicos (director alterno, investigador principal) y otros solo "coinvestigador". Por eso, la coinvestigación asociativa se define por el tipo de proyecto y no por el cargo. La marca de proyecto asociativo del registro original también tiene errores y se corrigió según el concurso.
+- En Fondecyt Postdoctorado, el académico que figura como coinvestigador es en la práctica el patrocinante, y el que figura como responsable fue el propio postdoctorado. Se clasificaron de acuerdo con eso.
 - `r n_sin_grado` académicos del universo no tienen grado registrado, así que no tienen años desde el grado y quedan en el grupo "sin doctorado".
 - `r n_sin_ingr` académicos no tienen registro de primera jerarquización, así que su año de ingreso queda sin dato.
 

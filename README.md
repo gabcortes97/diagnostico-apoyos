@@ -20,7 +20,7 @@ El análisis parte de cero respecto del proyecto previo (`../diagnostico-apoyos`
 - **Fondos externos:** todo concurso que no sea de la Facultad, incluidos los de la **U. de Chile** (U-Inicia, U-Apoya, U-Redes, etc.).
 - **Fondos de la Facultad (FPCI, FIP):** quedan fuera de la segmentación y se analizan **a posteriori**. FPCI es el instrumento de apoyo a carreras académicas.
 - **Liderazgo** (foco): solo *Investigador responsable* y *Director*.
-- **Coinvestigación** (secundaria): coinvestigador, director alterno, investigador asociado e **investigador principal**.
+- **Coinvestigación** (secundaria): toda participación no líder (coinvestigador, director alterno, investigador asociado e **investigador principal**). Se separa en **asociativa** o **individual** según el tipo de proyecto, no según la etiqueta del rol, porque CINDAI registra de forma irregular los roles en los asociativos.
 - **Patrocinio de postdoctorados:** categoría aparte, usada como indicador de consolidación.
 - **Trayectoria completa:** se incluyen los proyectos anteriores al ingreso a FACSO.
 - **Ingreso a la universidad:** se mide con `primera_jeraq`. `FECH_ING_U` no se usa, porque incluye ingresos a honorarios y otras modalidades.
